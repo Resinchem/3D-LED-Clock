@@ -15,6 +15,7 @@ You can safely edit most of the yaml to fit your needs.  However, you cannot cha
 For the Lovelace card, two custom cards (available via HACS) are necessary:
 
 [Custom Button Card](https://github.com/custom-cards/button-card)
+
 [Text-Divider-Row](https://github.com/iantrich/text-divider-row)
 
 The files here are just starting examples.  Many, many more automations are possible and if you'd like to share any you develop, I'll post the interesting ones here.  But some examples might include:
