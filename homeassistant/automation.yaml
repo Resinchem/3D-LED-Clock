@@ -1,0 +1,462 @@
+# ====================================
+# Brighness and Color Slider Processes
+#  ...Set: publishes value when slider changes
+#  ---Get: updates slider when MQTT changes
+# ====================================
+# Overall Brightness Setting
+# ---------------------------
+- alias: LED Clock Brightness Set  
+  trigger: 
+    platform: state
+    entity_id: input_number.led_clock_brightness
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/brightness"
+      payload: "{{ states('input_number.led_clock_brightness') | int }}"
+- alias: LED Clock Brightness Get  
+  trigger: 
+    platform: mqtt
+    topic: "stat/ledclock/brightness"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_brightness
+      value: "{{ trigger.payload }}"
+# -----------------------
+# Countdown Start Time
+# -----------------------
+- alias: LED Clock Countdown Start Set
+  trigger:
+    platform: state
+    entity_id: input_text.led_clock_countdown_start_time
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/countdown/starttime"
+      payload: "{{ states('input_text.led_clock_countdown_start_time') }}"
+- alias: LED Clock Countdown Start Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/countdown/starttime"
+  action:
+    service: input_text.set_value
+    data:
+      entity_id: input_text.led_clock_countdown_start_time
+      value: "{{ trigger.payload }}"
+# ----------------------
+# Temperature Correction
+# ----------------------
+- alias: LED Clock Temp Correction Set
+  trigger:
+    platform: state
+    entity_id: input_text.led_clock_temperature_correction
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/temperature/correction"
+      payload: "{{ states('input_text.led_clock_temperature_correction') }}"
+- alias: LED Clock Temp Correction Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/temperature/correction"
+  action:
+    service: input_text.set_value
+    data:
+      entity_id: input_text.led_clock_temperature_correction
+      value: "{{ trigger.payload }}"
+# ----------------------
+# Clock Colors
+# -----------------------
+- alias: LED Clock Color Red Set
+  trigger: 
+    platform: state
+    entity_id: input_number.led_clock_color_red
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/clock/color"
+      payload: "{{ states('input_number.led_clock_color_red') ~ ',' ~ states('input_number.led_clock_color_green') ~ ',' ~ states('input_number.led_clock_color_blue') }}"
+- alias: LED Clock Color Red Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/clock/color/red"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_color_red
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Color Green Set
+  trigger: 
+    platform: state
+    entity_id: input_number.led_clock_color_green
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/clock/color"
+      payload: "{{ states('input_number.led_clock_color_red') ~ ',' ~ states('input_number.led_clock_color_green') ~ ',' ~ states('input_number.led_clock_color_blue') }}"
+- alias: LED Clock Color Green Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/clock/color/green"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_color_green
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Color Blue Set
+  trigger: 
+    platform: state
+    entity_id: input_number.led_clock_color_blue
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/clock/color"
+      payload: "{{ states('input_number.led_clock_color_red') ~ ',' ~ states('input_number.led_clock_color_green') ~ ',' ~ states('input_number.led_clock_color_blue') }}"
+- alias: LED Clock Color Blue Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/clock/color/blue"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_color_blue
+      value: "{{ trigger.payload }}"
+# -----------------------
+# Countdown Colors
+# -----------------------
+# Active
+- alias: LED Clock Countdown Color Red Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_countdown_color_red
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/countdown/color"
+      payload: "{{ states('input_number.led_clock_countdown_color_red') ~ ',' ~ states('input_number.led_clock_countdown_color_green') ~ ',' ~ states('input_number.led_clock_countdown_color_blue') }}"
+- alias: LED Clock Countdown Color Red Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/countdown/color/red"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_countdown_color_red
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Countdown Color Green Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_countdown_color_green
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/countdown/color"
+      payload: "{{ states('input_number.led_clock_countdown_color_red') ~ ',' ~ states('input_number.led_clock_countdown_color_green') ~ ',' ~ states('input_number.led_clock_countdown_color_blue') }}"
+- alias: LED Clock Countdown Color Green Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/countdown/color/green"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_countdown_color_green
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Countdown Color Blue Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_countdown_color_blue
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/countdown/color"
+      payload: "{{ states('input_number.led_clock_countdown_color_red') ~ ',' ~ states('input_number.led_clock_countdown_color_green') ~ ',' ~ states('input_number.led_clock_countdown_color_blue') }}"
+- alias: LED Clock Countdown Color Blue Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/countdown/color/blue"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_countdown_color_blue
+      value: "{{ trigger.payload }}"
+# Paused
+- alias: LED Clock Countdown Color Paused Red Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_countdown_color_paused_red
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/countdown/colorpaused"
+      payload: "{{ states('input_number.led_clock_countdown_color_paused_red') ~ ',' ~ states('input_number.led_clock_countdown_color_paused_green') ~ ',' ~ states('input_number.led_clock_countdown_color_paused_blue') }}"
+- alias: LED Clock Countdown Color Paused Red Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/countdown/colorpaused/red"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_countdown_color_paused_red
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Countdown Color Paused Green Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_countdown_color_paused_green
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/countdown/colorpaused"
+      payload: "{{ states('input_number.led_clock_countdown_color_paused_red') ~ ',' ~ states('input_number.led_clock_countdown_color_paused_green') ~ ',' ~ states('input_number.led_clock_countdown_color_paused_blue') }}"
+- alias: LED Clock Countdown Color Paused Green Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/countdown/colorpaused/green"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_countdown_color_paused_green
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Countdown Color Paused Blue Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_countdown_color_paused_blue
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/countdown/colorpaused"
+      payload: "{{ states('input_number.led_clock_countdown_color_paused_red') ~ ',' ~ states('input_number.led_clock_countdown_color_paused_green') ~ ',' ~ states('input_number.led_clock_countdown_color_paused_blue') }}"
+- alias: LED Clock Countdown Color Paused Blue Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/countdown/colorpaused/blue"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_countdown_color_paused_blue
+      value: "{{ trigger.payload }}"
+# Final Min
+- alias: LED Clock Countdown Color Last Min Red Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_countdown_color_lastmin_red
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/countdown/colorfinalmin"
+      payload: "{{ states('input_number.led_clock_countdown_color_lastmin_red') ~ ',' ~ states('input_number.led_clock_countdown_color_lastmin_green') ~ ',' ~ states('input_number.led_clock_countdown_color_lastmin_blue') }}"
+- alias: LED Clock Countdown Color Last Min Red Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/countdown/colorfinalmin/red"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_countdown_color_lastmin_red
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Countdown Color Last Min Green Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_countdown_color_lastmin_green
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/countdown/colorfinalmin"
+      payload: "{{ states('input_number.led_clock_countdown_color_lastmin_red') ~ ',' ~ states('input_number.led_clock_countdown_color_lastmin_green') ~ ',' ~ states('input_number.led_clock_countdown_color_lastmin_blue') }}"
+- alias: LED Clock Countdown Color Last Min Green Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/countdown/colorfinalmin/green"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_countdown_color_lastmin_green
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Countdown Color Last Min Blue Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_countdown_color_lastmin_blue
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/countdown/colorfinalmin"
+      payload: "{{ states('input_number.led_clock_countdown_color_lastmin_red') ~ ',' ~ states('input_number.led_clock_countdown_color_lastmin_green') ~ ',' ~ states('input_number.led_clock_countdown_color_lastmin_blue') }}"
+- alias: LED Clock Countdown Color Last Min Blue Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/countdown/colorfinalmin/blue"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_countdown_color_lastmin_blue
+      value: "{{ trigger.payload }}"
+# -----------------------
+# Temperature Colors
+# -----------------------
+- alias: LED Clock Temperature Color Red Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_temperature_color_red
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/temperature/color"
+      payload: "{{ states('input_number.led_clock_temperature_color_red') ~ ',' ~ states('input_number.led_clock_temperature_color_green') ~ ',' ~ states('input_number.led_clock_temperature_color_blue') }}"
+- alias: LED Clock Temperature Color Red Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/temperature/color/red"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_temperature_color_red
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Temperature Color Green Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_temperature_color_green
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/temperature/color"
+      payload: "{{ states('input_number.led_clock_temperature_color_red') ~ ',' ~ states('input_number.led_clock_temperature_color_green') ~ ',' ~ states('input_number.led_clock_temperature_color_blue') }}"
+- alias: LED Clock Temperature Color Green Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/temperature/color/green"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_temperature_color_green
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Temperature Color Blue Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_temperature_color_blue
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/temperature/color"
+      payload: "{{ states('input_number.led_clock_temperature_color_red') ~ ',' ~ states('input_number.led_clock_temperature_color_green') ~ ',' ~ states('input_number.led_clock_temperature_color_blue') }}"
+- alias: LED Clock Temperature Color Blue Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/temperature/color/blue"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_temperature_color_blue
+      value: "{{ trigger.payload }}"
+# -----------------------
+# Scoreboard Colors
+# -----------------------
+# Left
+- alias: LED Clock Scoreboard Color Left Red Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_scoreboard_color_left_red
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/scoreboard/colorleft"
+      payload: "{{ states('input_number.led_clock_scoreboard_color_left_red') ~ ',' ~ states('input_number.led_clock_scoreboard_color_left_green') ~ ',' ~ states('input_number.led_clock_scoreboard_color_left_blue') }}"
+- alias: LED Clock Scoreboard Color Left Red Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/scoreboard/colorleft/red"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_scoreboard_color_left_red
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Scoreboard Color Left Green Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_scoreboard_color_left_green
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/scoreboard/colorleft"
+      payload: "{{ states('input_number.led_clock_scoreboard_color_left_red') ~ ',' ~ states('input_number.led_clock_scoreboard_color_left_green') ~ ',' ~ states('input_number.led_clock_scoreboard_color_left_blue') }}"
+- alias: LED Clock Scoreboard Color Left Green Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/scoreboard/colorleft/green"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_scoreboard_color_left_green
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Scoreboard Color Left Blue Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_scoreboard_color_left_blue
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/scoreboard/colorleft"
+      payload: "{{ states('input_number.led_clock_scoreboard_color_left_red') ~ ',' ~ states('input_number.led_clock_scoreboard_color_left_green') ~ ',' ~ states('input_number.led_clock_scoreboard_color_left_blue') }}"
+- alias: LED Clock Scoreboard Color Left Blue Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/scoreboard/colorleft/blue"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_scoreboard_color_left_blue
+      value: "{{ trigger.payload }}"
+# Right
+- alias: LED Clock Scoreboard Color Right Red Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_scoreboard_color_right_red
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/scoreboard/colorright"
+      payload: "{{ states('input_number.led_clock_scoreboard_color_right_red') ~ ',' ~ states('input_number.led_clock_scoreboard_color_right_green') ~ ',' ~ states('input_number.led_clock_scoreboard_color_right_blue') }}"
+- alias: LED Clock Scoreboard Color Right Red Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/scoreboard/colorright/red"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_scoreboard_color_right_red
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Scoreboard Color Right Green Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_scoreboard_color_right_green
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/scoreboard/colorright"
+      payload: "{{ states('input_number.led_clock_scoreboard_color_right_red') ~ ',' ~ states('input_number.led_clock_scoreboard_color_right_green') ~ ',' ~ states('input_number.led_clock_scoreboard_color_right_blue') }}"
+- alias: LED Clock Scoreboard Color Right Green Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/scoreboard/colorright/green"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_scoreboard_color_right_green
+      value: "{{ trigger.payload }}"
+- alias: LED Clock Scoreboard Color Right Blue Set
+  trigger:
+    platform: state
+    entity_id: input_number.led_clock_scoreboard_color_right_blue
+  action:
+    service: mqtt.publish
+    data:
+      topic: "cmnd/ledclock/scoreboard/colorright"
+      payload: "{{ states('input_number.led_clock_scoreboard_color_right_red') ~ ',' ~ states('input_number.led_clock_scoreboard_color_right_green') ~ ',' ~ states('input_number.led_clock_scoreboard_color_right_blue') }}"
+- alias: LED Clock Scoreboard Color Right Blue Get
+  trigger:
+    platform: mqtt
+    topic: "stat/ledclock/scoreboard/colorright/blue"
+  action:
+    service: input_number.set_value
+    data:
+      entity_id: input_number.led_clock_scoreboard_color_right_blue
+      value: "{{ trigger.payload }}"

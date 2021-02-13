@@ -1,0 +1,23 @@
+# ==================================
+# LED Clock Text Inputs
+# ==================================
+# Date/Time for setting clock time
+led_clock_time_load:
+  name: Date/Time
+  initial: "MMM dd yyyy;hh:mm:ss"
+  min: 20
+  max: 20
+# Start Time for Countdown
+led_clock_countdown_start_time:
+  name: Countdown Start Time
+  initial: "00:00:00"
+  min: 8
+  max: 8
+  pattern: "[0-2][0-9]:[0-5][0-9]:[0-5][0-9]"
+# Tmperature Correction
+led_clock_temperature_correction:
+  name: Temperature Correction
+  initial: 0.0
+  min: 3
+  max: 5
+  pattern: '^[\-]?\d{1,2}[\.]?[\d]{0,1}$'

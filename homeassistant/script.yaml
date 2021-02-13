@@ -1,0 +1,92 @@
+# =================================================
+#  Scripts for controlling/publishing to LED Clock
+#
+# =================================================
+# Clock
+# -------------
+# Load system time to input text for setting clock time
+led_clock_load_systime:
+  alias: 'Load system time'
+  sequence:
+    - service: input_text.set_value
+      data:
+        entity_id: input_text.led_clock_time_load
+        value: "{{ states('sensor.ledclock_settime') }}"
+# Push time to clock
+led_clock_upload_time:
+  alias: 'Update Clock Time'
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: 'cmnd/ledclock/clock/settime'
+        payload_template: "{{ states('input_text.led_clock_time_load') }}"
+
+# ------------------------
+# Countdown
+# ------------------------
+led_clock_countdown_reset:
+  alias: 'Reset Countdown'
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: "cmnd/ledclock/countdown/action"
+        payload: "2"
+led_clock_countdown_clear:
+  alias: 'Clear Countdown Start Time'
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: "cmnd/ledclock/countdown/action"
+        payload: "3"
+# -----------------------
+# Scoreboard
+# -----------------------
+led_clock_scoreboard_left_up:
+  alias: 'Increase Left Score'
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: "cmnd/ledclock/scoreboard/scoreup"
+        payload: "0"
+led_clock_scoreboard_right_up:
+  alias: 'Increase Right Score'
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: "cmnd/ledclock/scoreboard/scoreup"
+        payload: "1"
+led_clock_scoreboard_left_down:
+  alias: 'Decrease Left Score'
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: "cmnd/ledclock/scoreboard/scoredown"
+        payload: "0"
+led_clock_scoreboard_right_down:
+  alias: 'Increase Right Score'
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: "cmnd/ledclock/scoreboard/scoredown"
+        payload: "1"
+led_clock_scoreboard_left_reset:
+  alias: 'Reset Left Score'
+  sequence: 
+    - service: mqtt.publish
+      data:
+        topic: "cmnd/ledclock/scoreboard/reset"
+        payload: "0"
+led_clock_scoreboard_right_reset:
+  alias: 'Reset Right Score'
+  sequence: 
+    - service: mqtt.publish
+      data:
+        topic: "cmnd/ledclock/scoreboard/reset"
+        payload: "1"
+led_clock_scoreboard_reset:
+  alias: 'Reset Both Scores'
+  sequence: 
+    - service: mqtt.publish
+      data:
+        topic: "cmnd/ledclock/scoreboard/reset"
+        payload: "2"

@@ -1,0 +1,104 @@
+# ===================
+# LED Clock Switches
+# ===================
+# Mode
+- platform: mqtt
+  name: LED Clock Mode Clock
+  state_topic: "stat/ledclock/mode"
+  value_template: "{{ value == 'Clock' }}"
+  command_topic: "cmnd/ledclock/mode"
+  payload_on: "0"
+  #payload_off: "OFF"
+  state_on: true
+  state_off: false
+  retain: false
+- platform: mqtt
+  name: LED Clock Mode Countdown
+  state_topic: "stat/ledclock/mode"
+  value_template: "{{ value == 'Countdown' }}"
+  command_topic: "cmnd/ledclock/mode"
+  payload_on: "1"
+  #payload_off: "OFF"
+  state_on: true
+  state_off: false
+  retain: false
+- platform: mqtt
+  name: LED Clock Mode Temp
+  state_topic: "stat/ledclock/mode"
+  command_topic: "cmnd/ledclock/mode"
+  payload_on: "2"
+  #payload_off: "OFF"
+  state_on: true
+  state_off: false
+  value_template: "{{ value == 'Temperature' }}"
+  retain: false
+- platform: mqtt
+  name: LED Clock Mode Scoreboard
+  state_topic: "stat/ledclock/mode"
+  command_topic: "cmnd/ledclock/mode"
+  payload_on: "3"
+  #payload_off: "OFF"
+  state_on: true
+  state_off: false
+  value_template: "{{ value == 'Scoreboard' }}"
+  retain: false
+
+# 12/24 hour display
+- platform: mqtt
+  name: LED Clock Display 12 Hour
+  state_topic: "stat/ledclock/clock/display"
+  value_template: "{{ value | int == 12 }}"
+  state_on: true
+  state_off: false
+  command_topic: "cmnd/ledclock/clock/display"
+  payload_on: "12"
+  retain: false
+- platform: mqtt
+  name: LED Clock Display 24 Hour
+  state_topic: "stat/ledclock/clock/display"
+  value_template: "{{ value | int == 24 }}"
+  state_on: true
+  state_off: false
+  command_topic: "cmnd/ledclock/clock/display"
+  payload_on: "24"
+  retain: false
+  
+# Temperature C/F Display
+- platform: mqtt
+  name: LED Clock Temp Display F
+  state_topic: "stat/ledclock/temperature/symbol"
+  value_template: "{{ value == 'F' }}"
+  state_on: true
+  state_off: false
+  command_topic: "cmnd/ledclock/temperature/symbol"
+  payload_on: "13"
+  retain: false
+- platform: mqtt
+  name: LED Clock Temp Display C
+  state_topic: "stat/ledclock/temperature/symbol"
+  value_template: "{{ value == 'C' }}"
+  state_on: true
+  state_off: false
+  command_topic: "cmnd/ledclock/temperature/symbol"
+  payload_on: "12"
+  retain: false
+
+# Countdown Running/Stopped Status
+- platform: mqtt
+  name: LED Clock Countdown Running
+  state_topic: "stat/ledclock/countdown/status"
+  value_template: "{{ value == 'Running' }}"
+  state_on: true
+  state_off: false
+  command_topic: "cmnd/ledclock/countdown/action"
+  payload_on: "0"
+  retain: false
+- platform: mqtt
+  name: LED Clock Countdown Stopped
+  state_topic: "stat/ledclock/countdown/status"
+  value_template: "{{ value == 'Stopped' }}"
+  state_on: true
+  state_off: false
+  command_topic: "cmnd/ledclock/countdown/action"
+  payload_on: "1"
+  retain: false

@@ -1,0 +1,204 @@
+# =================================
+# LED Clock MQTT State Sensors
+# =================================
+  # --------------
+  # Global States
+  # --------------
+  - platform: mqtt
+    name: "LED Clock Mode"
+    state_topic: "stat/ledclock/mode"
+    icon: mdi:clock-digitial
+  - platform: mqtt
+    name: "LED Clock Brightness"
+    state_topic: "stat/ledclock/brightness"
+    icon: mdi:brightness-5
+  # --------------
+  # Clock
+  # --------------
+  - platform: mqtt
+    name: "LED Clock Time Display"
+    state_topic: "stat/ledclock/clock/display"
+    icon: mdi:clock-time-four-outline
+  # ----------------
+  # Countdown Timer
+  # -----------------
+  # Starting Time
+  - platform: mqtt
+    name: "LED Clock Countdown Start Time"
+    state_topic: "stat/ledclock/countdown/starttime"
+    icon: mdi:timer-outline
+  # Running Status
+  - platform: mqtt
+    name: "LED Clock Countdown Run Status"
+    state_topic: "stat/ledclock/countdown/status"
+    icon: mdi:run
+  # -------------
+  # Temperature
+  # -------------
+  # Display type (°C or °F)
+  - platform: mqtt
+    name: "LED Clock Temperature Display"
+    state_topic: "stat/ledclock/temperature/symbol"
+    icon: mdi:cogs
+  # Correction value
+  - platform: mqtt
+    name: "LED Clock Temperature Correction"
+    state_topic: "stat/ledclock/temperature/correction"
+    icon: mdi:compare-vertical
+  # Reported Temperature (after correction applied)
+  - platform: mqtt
+    name: "LED Clock Temperature Measured"
+    state_topic: "stat/ledclock/temperature"
+    unit_of_measurement: "°"
+    icon: mdi:thermometer
+  # -----------------
+  # Scoreboard
+  # -----------------
+  # Score Left
+  - platform: mqtt
+    name: "LED Clock Scoreboard Score Left"
+    state_topic: "stat/ledclock/scoreboard/scoreleft"
+    icon: mdi:alpha-v-box-outline
+  # Score Right
+  - platform: mqtt
+    name: "LED Clock Scoreboard Score Right"
+    state_topic: "stat/ledclock/scoreboard/scoreright"
+    icon: mdi:alpha-h-box-outline
+  # ------------------------------------------------------
+  # Color states, as individual red, green and blue values
+  # ------------------------------------------------------
+  # Clock color
+  - platform: mqtt
+    name: "LED Clock Color Val Red"
+    state_topic: "stat/ledclock/clock/color/red"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Color Val Green"
+    state_topic: "stat/ledclock/clock/color/green"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Color Val Blue"
+    state_topic: "stat/ledclock/clock/color/blue"
+    icon: mdi:palette
+  # Countdown Colors
+  - platform: mqtt
+    name: "LED Clock Countdown Color Val Red"
+    state_topic: "stat/ledclock/countdown/color/red"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Countdown Color Val Green"
+    state_topic: "stat/ledclock/countdown/color/green"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Countdown Color Val Blue"
+    state_topic: "stat/ledclock/countdown/color/blue"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Countdown Color Final Min Val Red"
+    state_topic: "stat/ledclock/countdown/colorfinalmin/red"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Countdown Color Final Min Val Green"
+    state_topic: "stat/ledclock/countdown/colorfinalmin/green"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Countdown Color Final Min Val Blue"
+    state_topic: "stat/ledclock/countdown/colorfinalmin/blue"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Countdown Color Paused Val Red"
+    state_topic: "stat/ledclock/countdown/colorpaused/red"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Countdown Color Paused Val Green"
+    state_topic: "stat/ledclock/countdown/colorpaused/green"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Countdown Color Paused Val Blue"
+    state_topic: "stat/ledclock/countdown/colorpaused/blue"
+    icon: mdi:palette
+  # Temperature Color
+  - platform: mqtt
+    name: "LED Clock Temperature Color Val Red"
+    state_topic: "stat/ledclock/temperature/color/red"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Temperature Color Val Green"
+    state_topic: "stat/ledclock/temperature/color/green"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Temperature Color Val Blue"
+    state_topic: "stat/ledclock/temperature/color/blue"
+    icon: mdi:palette
+  # Scoreboard Colors
+  - platform: mqtt
+    name: "LED Clock Scoreboard Color Left Val Red"
+    state_topic: "stat/ledclock/scoreboard/colorleft/red"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Scoreboard Color Left Val Green"
+    state_topic: "stat/ledclock/scoreboard/colorleft/green"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Scoreboard Color Left Val Blue"
+    state_topic: "stat/ledclock/scoreboard/colorleft/blue"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Scoreboard Color Right Val Red"
+    state_topic: "stat/ledclock/scoreboard/colorright/red"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Scoreboard Color Right Val Green"
+    state_topic: "stat/ledclock/scoreboard/colorright/green"
+    icon: mdi:palette
+  - platform: mqtt
+    name: "LED Clock Scoreboard Color Right Val Blue"
+    state_topic: "stat/ledclock/scoreboard/colorright/blue"
+    icon: mdi:palette
+
+  # ----------------------------------------------------
+  # Color states returned as RGB string: (r, g, b)
+  # ----------------------------------------------------
+  - platform: template
+    sensors:
+      led_clock_color_rgb:
+        friendly_name: "LED Clock RGB Color"
+        value_template: >
+          "{{ '(' ~ (states('sensor.led_clock_color_val_red')) ~ ', ' ~ (states('sensor.led_clock_color_val_green')) ~ ', ' ~ (states('sensor.led_clock_color_val_blue')) ~ ')'}}"
+        icon_template: mdi:palette
+
+      led_clock_countdown_color_rgb:
+        friendly_name: "LED Clock Countdown RGB Color"
+        value_template: >
+          "{{ '(' ~ (states('sensor.led_clock_countdown_color_val_red')) ~ ', ' ~ (states('sensor.led_clock_countdown_color_val_green')) ~ ', ' ~ (states('sensor.led_clock_countdown_color_val_blue')) ~ ')'}}"
+        icon_template: mdi:palette
+
+      led_clock_countdown_color_final_min_rgb:
+        friendly_name: "LED Clock Countdown Final Min RGB Color"
+        value_template: >
+          "{{ '(' ~ (states('sensor.led_clock_countdown_color_final_min_val_red')) ~ ', ' ~ (states('sensor.led_clock_countdown_color_final_min_val_green')) ~ ', ' ~ (states('sensor.led_clock_countdown_color_final_min_val_blue')) ~ ')'}}"
+        icon_template: mdi:palette
+
+      led_clock_countdown_color_paused_rgb:
+        friendly_name: "LED Clock Countdown Paused RGB Color"
+        value_template: >
+          "{{ '(' ~ (states('sensor.led_clock_countdown_color_paused_val_red')) ~ ', ' ~ (states('sensor.led_clock_countdown_color_paused_val_green')) ~ ', ' ~ (states('sensor.led_clock_countdown_color_paused_val_blue')) ~ ')'}}"
+        icon_template: mdi:palette
+
+      led_clock_temperature_color_rgb:
+        friendly_name: "LED Clock Temperature RGB Color"
+        value_template: >
+          "{{ '(' ~ (states('sensor.led_clock_temperature_color_val_red')) ~ ', ' ~ (states('sensor.led_clock_temperature_color_val_green')) ~ ', ' ~ (states('sensor.led_clock_temperature_color_val_blue')) ~ ')'}}"
+        icon_template: mdi:palette
+
+      led_clock_scoreboard_color_left_rgb:
+        friendly_name: "LED Clock Scoreboard RGB Color Left"
+        value_template: >
+          "{{ '(' ~ (states('sensor.led_clock_scoreboard_color_left_val_red')) ~ ', ' ~ (states('sensor.led_clock_scoreboard_color_left_val_green')) ~ ', ' ~ (states('sensor.led_clock_scoreboard_color_left_val_blue')) ~ ')'}}"
+        icon_template: mdi:palette
+
+      led_clock_scoreboard_color_right_rgb:
+        friendly_name: "LED Clock Scoreboard RGB Color Right"
+        value_template: >
+          "{{ '(' ~ (states('sensor.led_clock_scoreboard_color_right_val_red')) ~ ', ' ~ (states('sensor.led_clock_scoreboard_color_right_val_green')) ~ ', ' ~ (states('sensor.led_clock_scoreboard_color_right_val_blue')) ~ ')'}}"
+        icon_template: mdi:palette

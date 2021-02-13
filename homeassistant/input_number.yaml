@@ -1,0 +1,140 @@
+# =========================================
+#  LED Clock Brightness and Color Sliders
+# =========================================
+# LED Clock Brightness:
+led_clock_brightness:
+  name: LED Clock Brightness
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+# LED Clock Clock Colors (R, G, B)
+led_clock_color_red:
+  name: Clock Color Red
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_color_green:
+  name: Clock Color Green
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_color_blue:
+  name: Clock Color Blue
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+# LED Clock Countdown Color
+led_clock_countdown_color_red:
+  name: Countdown Active Color Red
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_countdown_color_green:
+  name: Countdown Active Color Green
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_countdown_color_blue:
+  name: Countdown Active Color Blue
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_countdown_color_paused_red:
+  name: Countdown Paused Color Red
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_countdown_color_paused_green:
+  name: Countdown Paused Color Green
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_countdown_color_paused_blue:
+  name: Countdown Paused Color Blue
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_countdown_color_lastmin_red:
+  name: Countdown Last Minute Color Red
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_countdown_color_lastmin_green:
+  name: Countdown Last Minute Color Green
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_countdown_color_lastmin_blue:
+  name: Countdown Last Minute Color Blue
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+# LED Clock Temperature Color
+led_clock_temperature_color_red:
+  name: Temperature Color Red
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_temperature_color_green:
+  name: Temperature Color Green
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_temperature_color_blue:
+  name: Temperature Color Blue
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+# LED Clock Scoreboard Colors
+led_clock_scoreboard_color_left_red:
+  name: Scoreboard Left Color Red
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_scoreboard_color_left_green:
+  name: Scoreboard Left Color Green
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_scoreboard_color_left_blue:
+  name: Scoreboard Left Color Blue
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_scoreboard_color_right_red:
+  name: Scoreboard Right Color Red
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_scoreboard_color_right_green:
+  name: Scoreboard Right Color Green
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
+led_clock_scoreboard_color_right_blue:
+  name: Scoreboard Right Color Blue
+  min: 0
+  max: 255
+  step: 1
+  mode: slider
