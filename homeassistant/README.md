@@ -23,4 +23,4 @@ The files here are just starting examples.  Many, many more automations are poss
 - Sound the buzzer based on any other HA event or state change.
 - Use the countdown feature to trigger other automations.
 
-With over 30 MQTT sensors and over 20 MQTT commands, the possibilites are endless. 
+With over 30 MQTT sensors and over 20 MQTT commands, the possibilites are endless. See a full list of MQTT topcis in the MQTT folder.
