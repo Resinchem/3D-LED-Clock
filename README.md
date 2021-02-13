@@ -11,4 +11,4 @@
 
 ## Files, details and instructions coming soon!
 
-Modified based on original design by Leon van den Beukel
+Modified based on original design by Leon van den Beukel.
