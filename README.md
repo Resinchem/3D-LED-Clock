@@ -9,6 +9,7 @@
 ## Plus optional full settings and control via Home Assistant integration (MQTT)
 ![clock_ha_scoreboard](https://user-images.githubusercontent.com/55962781/107840499-30b04800-6d81-11eb-8b5c-2a2fe1410438.jpg)
 
-## Files, details and instructions coming soon!
+## Full build details, wiring schematics and more at [ResinChem Tech Blog](https://resinchemtech.blogspot.com/2021/02/3d-printed-clock-scoreboard-and-more.html)
+
 
 Modified based on an original design by Leon van den Beukel.
