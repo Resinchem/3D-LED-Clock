@@ -1,8 +1,9 @@
 /*
- * VERSION 0.92
- * Feburary 12, 2021
- * License: Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
- * Based upon original design by Leon van den Beukel
+ * VERSION 0.93
+ * Feburary 15, 2021
+ * See Release notes for details on changes
+ * By ResinChem Tech - licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
+ * Adapted from original work published by Leon van den Beukel 
 */
 #include <Wire.h>
 #include <RtcDS3231.h>                        // Include RTC library by Makuna: https://github.com/Makuna/Rtc
@@ -305,6 +306,7 @@ void setup() {
       //client.publish("stat/ledclock/temperature/correction", outCorr, true);
       updateMqttTempCorrection();
       updateMqttTempSymbol(temperatureSymbol);
+      updateMqttTemperature();
     }
   });  
 
@@ -505,11 +507,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
     temperatureSymbol = message.toInt();
     clockMode = 2;
     updateMqttTempSymbol(temperatureSymbol);
+    updateMqttTemperature();
     // Correction
   } else if (strcmp(topic, "cmnd/ledclock/temperature/correction") == 0) {
     temperatureCorrection = message.toInt();
     clockMode = 2;
     updateMqttTempCorrection();
+    updateMqttTemperature();
   
   // Scoreboard
     // Left Color
