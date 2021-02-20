@@ -1,5 +1,5 @@
 /*
- * VERSION 0.94
+ * VERSION 1.00
  * Feburary 19, 2021
  * See Release notes for details on changes
  * By ResinChem Tech - licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
@@ -13,9 +13,9 @@
 #include <FastLED.h>
 #include <FS.h>                               // Please read the instructions on http://arduino.esp8266.com/Arduino/versions/2.3.0/doc/filesystem.html#uploading-files-to-file-system
 #include <PubSubClient.h>
-#include <ESP8266mDNS.h>                      // NEW for 0.94
-#include <WiFiUdp.h>                          // NEW for 0.94
-#include <ArduinoOTA.h>                       // NEW for 0.94
+#include <ESP8266mDNS.h>                      // NEW for v1.00
+#include <WiFiUdp.h>                          // NEW for v1.00
+#include <ArduinoOTA.h>                       // NEW for v1.00
 #include "Settings.h"
 #define countof(a) (sizeof(a) / sizeof(a[0]))
 
@@ -27,9 +27,9 @@
 
 byte oldMode = 0;
 int oldTemp = 0;
-bool ota_flag = true;               //0.94
-uint16_t ota_time_elapsed = 0;      //0.94
-uint16_t ota_time_window = 2500;    //0.94  minimum time on boot for IP address to show in IDE ports
+bool ota_flag = true;               //v1.00
+uint16_t ota_time_elapsed = 0;      //v1.00
+uint16_t ota_time_window = 2500;    //v1.00 minimum time on boot for IP address to show in IDE ports
 
 
 #if defined(WIFIMODE) && (WIFIMODE == 0 || WIFIMODE == 2)
@@ -191,7 +191,7 @@ void setup() {
 #endif
   httpUpdateServer.setup(&server);
   
-  //OTA Updates - new in V0.94
+  //OTA Updates - new in V1.00
   ArduinoOTA.setHostname("led-clock");
   ArduinoOTA.onStart([]() {
     String type;
@@ -327,7 +327,7 @@ void setup() {
     server.send(200, "text/json", "{\"result\":\"ok\"}");
   });  
 
-  // New web commands for OTA updates - v0.94
+  // New web commands for OTA updates - v1.00
   server.on("/restart",[](){
     server.send(200, "text/html", "<h1>Restarting...</h1>");
     delay(1000);
@@ -606,12 +606,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
     clockMode = 3;
     updateMqttScoreboardScores();
   }
-
-
 }
 
 void loop(){
-  // v0.94: OTA Update - on boot will pause for 2.5 seconds (needed to broadcast network mDNS)
+  // v1.00: OTA Update - on boot will pause for 2.5 seconds (needed to broadcast network mDNS)
   // When OTA flag set via HTML call, time to upload set at 20 sec. via server callback above.  Alter there if more time desired.
   if (ota_flag) {
     displayOTA();
