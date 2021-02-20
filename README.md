@@ -1,13 +1,13 @@
 # 3D-LED-Clock
 
-## 3D Printed LED clock, countdown timer, temperature and scoreboard. Built-in web app control. Now with OTA updates!
-![ClockMontage](https://user-images.githubusercontent.com/55962781/107840178-8fc08d80-6d7e-11eb-80a8-227c2215a7ed.jpg)
+## 3D Printed LED clock, countdown timer, temperature and scoreboard. Multiple control options. Now with OTA updates!
+![ClockMontage_HA_Small](https://user-images.githubusercontent.com/55962781/108584652-2c4fd600-7311-11eb-9c56-c8724e5a356a.jpg)
 
 ## And local button control
-![ClockButtonControl](https://user-images.githubusercontent.com/55962781/107840356-08741980-6d80-11eb-9303-f6c1c6bdb5d9.jpg)
+![ClockButtonControl_small](https://user-images.githubusercontent.com/55962781/108585001-a6815a00-7313-11eb-991f-80e0f757ae75.jpg)
 
 ## Plus optional full settings and control via Home Assistant integration (MQTT)
-![clock_ha_scoreboard](https://user-images.githubusercontent.com/55962781/107840499-30b04800-6d81-11eb-8b5c-2a2fe1410438.jpg)
+![clock_ha_scoreboard_small](https://user-images.githubusercontent.com/55962781/108585123-96b64580-7314-11eb-96bc-57ae32154796.jpg)
 
 ## Full build details, wiring schematics and more at [ResinChem Tech Blog](https://resinchemtech.blogspot.com/2021/02/3d-printed-clock-scoreboard-and-more.html)
 
