@@ -1,6 +1,6 @@
 # 3D-LED-Clock
 
-## 3D Printed LED clock, countdown timer, temperature and scoreboard. Built-in web app control.
+## 3D Printed LED clock, countdown timer, temperature and scoreboard. Built-in web app control. Now with OTA updates!
 ![ClockMontage](https://user-images.githubusercontent.com/55962781/107840178-8fc08d80-6d7e-11eb-80a8-227c2215a7ed.jpg)
 
 ## And local button control
