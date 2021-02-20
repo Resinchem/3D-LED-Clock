@@ -1,6 +1,6 @@
 /*
- * VERSION 0.93
- * Feburary 15, 2021
+ * VERSION 0.94
+ * Feburary 19, 2021
  * See Release notes for details on changes
  * By ResinChem Tech - licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
  * Adapted from original work published by Leon van den Beukel 
@@ -13,56 +13,24 @@
 #include <FastLED.h>
 #include <FS.h>                               // Please read the instructions on http://arduino.esp8266.com/Arduino/versions/2.3.0/doc/filesystem.html#uploading-files-to-file-system
 #include <PubSubClient.h>
+#include <ESP8266mDNS.h>                      // NEW for 0.94
+#include <WiFiUdp.h>                          // NEW for 0.94
+#include <ArduinoOTA.h>                       // NEW for 0.94
+#include "Settings.h"
 #define countof(a) (sizeof(a) / sizeof(a[0]))
 
-// ===============================================================================
-// Update these values to match your build and board type if not using D1 Mini
-#define NUM_LEDS 86                           // Total of 86 LED's if built as shown    
-#define MILLI_AMPS 6000                       // Update to match max milliamp output of your power suppy (or about 500 milliamp lower than max to be safe)
-#define DATA_PIN D6                           // Change this if you are using another type of ESP board than a WeMos D1 Mini
-#define COUNTDOWN_OUTPUT D5                   // Output pin to drive buzzer or other device upon countdown expiration
-#define WIFIMODE 2                            // 0 = Only Soft Access Point, 1 = Only connect to local WiFi network with UN/PW, 2 = Both
-#define MQTTMODE 1                            // 0 = Disable MQTT, 1 = Enable (will only be enabled if WiFi mode = 1 or 2 - broker must be on same network)
-#define MQTTSERVER "192.168.1.108"            // IP Address (or url) of MQTT Broker. Use '0.0.0.0' if not enabling MQTT
-#define MQTTPORT 1883                         // Port of MQTT Broker.  This is usually 1883
-// Optional pushbuttons (colors listed match ones used in build instructions)
-// All pins need to be LOW when button open or code modifications will be required below
-#define MODE_PIN D3                           // Push button (white): Change Mode
-#define V1_PIN D4                             // Push button (red): Visitor+/Minutes Add button
-#define V0_PIN 3                              // Push button (green): Visitor-/Seconds Add button (RX pin)
-#define H1_PIN D7                             // Push button (yellow): Home+/Countdown start button
-#define H0_PIN 1                              // Push button (blue): Home-/Countdown stop/pause button (TX pin)
-
-// ------------------------------------------------------------------------------------------------
-// Settings and options - Defaults upon boot-up.  Most values can be updated via web app after boot
-// ------------------------------------------------------------------------------------------------
-
-byte clockMode = 0;                             // Default mode at boot: 0=Clock, 1=Countdown, 2=Temperature, 3=Scoreboard
-byte brightness = 255;                          // Default starting brightness at boot. 255=max brightness based on milliamp rating of power supply
-byte temperatureSymbol = 13;                    // Default temp display: 12=Celcius, 13=Fahrenheit
-float temperatureCorrection = -3.0;             // Temp from RTC module.  Generally runs "hot" due to heat from chip.  Adjust as needed.
-unsigned long temperatureUpdatePeriod = 180000; // How often, in milliseconds to update MQTT time. Recommend minimum of 60000 (one minute) or greater. Set to 0 to disable updates.
-byte hourFormat = 12;                           // Change this to 24 if you want default 24 hours format instead of 12     
-byte scoreboardLeft = 0;                        // Starting "Visitor" (left) score on scoreboard
-byte scoreboardRight = 0;                       // Starting "Home" (right) score on scoreboard
-
-// Default starting colors for modes
-// Named colors can be used.  Valid values found at: http://fastled.io/docs/3.1/struct_c_r_g_b.html
-// Alternatively, you can specify each of the following as rgb values.  Example: CRGB clockColor = CRBG(0,0,255);
-
-CRGB clockColor = CRGB:: Blue;
-CRGB countdownColor = CRGB::Green;
-CRGB countdownColorPaused = CRGB::Orange;     // If different from countdownColor, countdown color will change to this when paused/stopped.
-CRGB countdownColorFinalMin = CRGB::Red;      // If different from countdownColor, countdown color will change to this for final 60 seconds.
-CRGB temperatureColor = CRGB::Turquoise;
-CRGB scoreboardColorLeft = CRGB::Green;
-CRGB scoreboardColorRight = CRGB::Red;
-CRGB alternateColor = CRGB::Black;            // Recommend to leave as Black. Otherwise unused pixels will be lit in digits
-// ================================================================================
-//  Do not change any values below the above line unless you are sure you know what you are doing.
+// ==============================================================================================
+//  *** REVIEW THE Settings.h and Credentials.h FILES AND SET TO MATCH YOUR ENVIRONMENT/BUILD ***
+//      You may also set various default boot options in the Settings.h file
+// ==============================================================================================
+// Do not change any values below unless you are sure you know what you are doing!
 
 byte oldMode = 0;
 int oldTemp = 0;
+bool ota_flag = true;               //0.94
+uint16_t ota_time_elapsed = 0;      //0.94
+uint16_t ota_time_window = 2500;    //0.94  minimum time on boot for IP address to show in IDE ports
+
 
 #if defined(WIFIMODE) && (WIFIMODE == 0 || WIFIMODE == 2)
   const char* APssid = "CLOCK_AP";        
@@ -117,6 +85,10 @@ long numbers[] = {
   0b111111111111000000000,  // [11] degrees symbol
   0b000000111111111111000,  // [12] C(elsius)
   0b111000111111111000000,  // [13] F(ahrenheit)
+  0b000111000111111111111,  // [14] U
+  0b111111111111111000000,  // [15] P
+  0b000000000111111111000,  // [16] L
+  0b111111000000111111111,  // {17] d
 };
 
 boolean reconnect() {
@@ -218,6 +190,20 @@ void setup() {
   updateMqttMode();
 #endif
   httpUpdateServer.setup(&server);
+  
+  //OTA Updates - new in V0.94
+  ArduinoOTA.setHostname("led-clock");
+  ArduinoOTA.onStart([]() {
+    String type;
+    if (ArduinoOTA.getCommand() == U_FLASH) {
+      type = "sketch";
+    } else { // U_FS
+      type = "filesystem";
+    }
+    // NOTE: if updating FS this would be the place to unmount FS using FS.end()
+  });
+  ArduinoOTA.begin();
+  
   // ************ Update MQTT stat vals with boot values *****************
   if (mqttConnected) {
     updateMqttBrightness(brightness);
@@ -340,8 +326,21 @@ void setup() {
     clockMode = 0;     
     server.send(200, "text/json", "{\"result\":\"ok\"}");
   });  
+
+  // New web commands for OTA updates - v0.94
+  server.on("/restart",[](){
+    server.send(200, "text/html", "<h1>Restarting...</h1>");
+    delay(1000);
+    ESP.restart();
+  });
+  server.on("/otaupdate",[]() {
+    server.send(200, "text/html", "<h1>Ready for upload...<h1><h3>Start upload from IDE now</h3>");
+    ota_flag = true;
+    ota_time_window = 20000;
+    ota_time_elapsed = 0;
+  });
   
-  // Before uploading the files with the "ESP8266 Sketch Data Upload" tool, zip the files with the command "gzip -r ./data/" (on Windows you can do this with a Git Bash)
+  // Before uploading the files with the "ESP8266 Sketch Data Upload" tool, zip the files (if not already zipped) with the command "gzip -r ./data/" (on Windows you can do this with a Git Bash)
   // *.gz files are automatically unpacked and served from your ESP (so you don't need to create a handler for each file).
   server.serveStatic("/", SPIFFS, "/", "max-age=86400");
   server.begin();     
@@ -612,6 +611,18 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
 
 void loop(){
+  // v0.94: OTA Update - on boot will pause for 2.5 seconds (needed to broadcast network mDNS)
+  // When OTA flag set via HTML call, time to upload set at 20 sec. via server callback above.  Alter there if more time desired.
+  if (ota_flag) {
+    displayOTA();
+    uint16_t ota_time_start = millis();
+    while (ota_time_elapsed < ota_time_window) {
+      ArduinoOTA.handle();  
+      ota_time_elapsed = millis()-ota_time_start;   
+      delay(10); 
+    }
+    ota_flag = false;
+  }
 
   server.handleClient();
   if (MQTTMODE == 1) {
@@ -640,7 +651,7 @@ void loop(){
     clockMode = clockMode + 1; 
     delay(500);
   }
-  if (clockMode > 3) {
+  if (clockMode > 3) {         
     clockMode = 0;
   }
 
@@ -755,7 +766,8 @@ void loop(){
       updateTemperature();      
     } else if (clockMode == 3) {
       updateScoreboard();            
-    }
+    } 
+
 
     FastLED.setBrightness(brightness);
     FastLED.show();
@@ -1025,6 +1037,19 @@ void updateScoreboard() {
   displayNumber(sr2,0,scoreboardColorRight);
   hideDots();
 }
+
+void displayOTA() {
+  //Display UPLd message while actively waiting OTA upload to start
+  CRGB otaColor = CRGB::Red;
+  displayNumber(14,3,otaColor);  //U
+  displayNumber(15,2,otaColor);  //P
+  displayNumber(16,1,otaColor);  //L
+  displayNumber(17,0,otaColor);  //d
+  hideDots();
+  FastLED.setBrightness(brightness);
+  FastLED.show();
+}
+
 // ******* MQTT Updating ***********
 void updateMqttMode() {
   switch (clockMode) {

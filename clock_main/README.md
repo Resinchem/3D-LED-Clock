@@ -9,10 +9,13 @@ Add support for the ESP8266:
 - Install the ESP8266 platform via board manager
 - Select the Wemos D1 R1 board (or as appropriate for the board you use.
 
-Install the following additional libraries:
+Install the following additional libraries (if not already installed):
 - FastLED
 - PubSubClient
 - Rtc by Makuna
+
+(If of the other libraries listed at the top of the clock_main.ino are missing from your install, you'll need to install those as well).
+
 
 Upload the contents of the /data folder to flash memory:
   see: [Uploading Files to Flash Memory](http://arduino.esp8266.com/Arduino/versions/2.3.0/doc/filesystem.html#uploading-files-to-file-system) for instructions.
@@ -22,9 +25,9 @@ Upload the contents of the /data folder to flash memory:
 
 Open this file with the IDE or text editor.  Update the SSID and password for your wifi.  If enabling MQTT, also update the MQTT user and password. Save the file
 
-### Additional Settings and Options
+### Settings.h - Additional Settings and Options
 
-Within the clock_main.ino file are addition settings and a number of options you should review.  Each of these are documented within the .ino file and are self-explanatory. At a minimum, you should review and update the following:
+Within the Settings.h file are addition settings and a number of options you should review.  Each of these are documented within the .ino file and are self-explanatory. At a minimum, you should review and update the following:
 - MILLI_AMPS: Update this to match the maximum millamps of your power supply
 - MQTTMODE: 1 to enable MQTT, 0 to disable 
 - MQTTSERVER: Set to IP or URL of your MQTT broker if MQTT enabled
