@@ -4,7 +4,7 @@
 
 All communications between the clock (ESP8266) and Home Assistant are via MQTT.  Currently, the clock does not support MQTT discovery (anyone willing to take a stab at this is welcome to submit a PR), therefore all entites must be manually created in Home Assistant.  Obviously, you must have an MQTT broker running (either the integrated HA Mosquitto or a standalone broker).
 
-MQTT is not required to build and use the clock. MQTT can be disabled within the Arudino sketch by setting MQTTMODE = 0 in the settings section of the .ino. 
+MQTT is not required to build and use the clock. MQTT can be disabled within the Arudino sketch by setting MQTTMODE = 0 in the Settings.h file. See the [wiki](https://github.com/Resinchem/3D-LED-Clock/wiki) for additional details.
 
 The samples include every possible sensor value and commands available for the clock.  You may not wish to include them all.
 
