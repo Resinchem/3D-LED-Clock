@@ -24,4 +24,6 @@ Here are the settings I used for the Ender3 Pro:
 - Supports: No*
 (\*Except for the Control Enclosure, which used supports touching buildplate)
 
+#### See [ResinChem Tech Blog](https://resinchemtech.blogspot.com/2021/02/3d-printed-clock-scoreboard-and-more.html) for complete build details, parts list, wiring schematics and more.
+
 All .stl files original design, except for ButtonCase.stl and ControlEnclosure, by Leon van den Beukel.
