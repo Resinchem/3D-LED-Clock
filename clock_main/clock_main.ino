@@ -1,6 +1,6 @@
 /*
- * VERSION 1.00
- * Feburary 19, 2021
+ * VERSION 1.01
+ * January 10, 2024
  * See Release notes for details on changes
  * By ResinChem Tech - licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
  * Adapted from original work published by Leon van den Beukel 
@@ -47,7 +47,9 @@ uint16_t ota_time_window = 2500;    //v1.00 minimum time on boot for IP address 
   #endif
 #endif
 WiFiClient espClient;
-PubSubClient client(espClient);    
+#if (WIFIMODE == 1 || WIFIMODE == 2) && (MQTTMODE == 1)
+  PubSubClient client(espClient);   
+#endif
 long lastReconnectAttempt = 0;
 
 RtcDS3231<TwoWire> Rtc(Wire);
@@ -92,6 +94,7 @@ long numbers[] = {
 };
 
 boolean reconnect() {
+#if (WIFIMODE == 1 || WIFIMODE == 2) && (MQTTMODE == 1)
   if (client.connect("ClockClient", mqttUser, mqttPW)) {
     // Once connected, publish an announcement...
     client.publish("stat/ledclock/status", "connected");
@@ -99,6 +102,7 @@ boolean reconnect() {
     client.subscribe("cmnd/ledclock/#");
   }
   return client.connected();
+#endif
 }
 
 void setup() {
@@ -623,6 +627,7 @@ void loop(){
   }
 
   server.handleClient();
+#if (WIFIMODE == 1 || WIFIMODE == 2) && (MQTTMODE == 1)
   if (MQTTMODE == 1) {
     if (!client.connected()) {
       long now = millis();
@@ -638,6 +643,7 @@ void loop(){
       client.loop();
     }
   }
+#endif
   int modeReading = digitalRead(MODE_PIN);
   int v1Reading = digitalRead(V1_PIN);
   int v0Reading = digitalRead(V0_PIN);
@@ -1050,6 +1056,7 @@ void displayOTA() {
 
 // ******* MQTT Updating ***********
 void updateMqttMode() {
+#if (WIFIMODE == 1 || WIFIMODE == 2) && (MQTTMODE == 1)
   switch (clockMode) {
     case 0:
       client.publish("stat/ledclock/mode", "Clock", true);
@@ -1064,22 +1071,28 @@ void updateMqttMode() {
       client.publish("stat/ledclock/mode", "Scoreboard", true);
       break;
   }
+#endif
 }
 
 void updateMqttBrightness(unsigned int bright_val) {
+#if (WIFIMODE == 1 || WIFIMODE == 2) && (MQTTMODE == 1)
   char outBright[5];
   sprintf(outBright, "%3u", bright_val);
   client.publish("stat/ledclock/brightness", outBright, true);
+#endif
 }
 
 void updateMqttClockDisplay(unsigned int display_val) {
+#if (WIFIMODE == 1 || WIFIMODE == 2) && (MQTTMODE == 1)
   char outDisplay[3];
   sprintf(outDisplay, "%3u", display_val);
   client.publish("stat/ledclock/clock/display", outDisplay, true);
+#endif
 }
 
 void updateMqttColor(unsigned int whichMode, unsigned int r_val, unsigned int g_val, unsigned int b_val) {
   // whichmode: 0 Clock, 1 Countdown, 2 CountdownPaused, 3 CountdownFinalMin, 4 Temp, 5 ScoreboardLeft, 6 ScoreboardRight
+#if (WIFIMODE == 1 || WIFIMODE == 2) && (MQTTMODE == 1)
   char outRed[5];
   char outGreen[5];
   char outBlue[5];
@@ -1123,10 +1136,12 @@ void updateMqttColor(unsigned int whichMode, unsigned int r_val, unsigned int g_
       client.publish("stat/ledclock/scoreboard/colorright/blue", outBlue, true);
       break;
   }
+#endif
 }
 
 void updateMqttCountdownStartTime(unsigned long initMillis) {
   //  Break into hh, mm and ss and post as hh:mm:ss
+#if (WIFIMODE == 1 || WIFIMODE == 2) && (MQTTMODE == 1)
   unsigned long hours   = ((initMillis / 1000) / 60) / 60;
   unsigned long minutes = (initMillis / 1000) / 60;
   unsigned long seconds = initMillis / 1000;
@@ -1141,16 +1156,21 @@ void updateMqttCountdownStartTime(unsigned long initMillis) {
   char outTime[10];
   sprintf(outTime, "%1u%1u:%1u%1u:%1u%1u", h1, h2, m1, m2, s1, s2);
   client.publish("stat/ledclock/countdown/starttime", outTime, true); 
+#endif
 }
+
 void updateMqttCountdownStatus(bool curStatus) {
+#if (WIFIMODE == 1 || WIFIMODE == 2) && (MQTTMODE == 1)
   if (curStatus) {
     client.publish("stat/ledclock/countdown/status", "Running", true);
   } else {
     client.publish("stat/ledclock/countdown/status", "Stopped", true);
   }
+#endif
 }
 
 void updateMqttTempSymbol(unsigned int symbolVal) {
+#if (WIFIMODE == 1 || WIFIMODE == 2) && (MQTTMODE == 1)  
   switch(symbolVal) {
     case 12:
       client.publish("stat/ledclock/temperature/symbol", "C", true);
@@ -1162,15 +1182,19 @@ void updateMqttTempSymbol(unsigned int symbolVal) {
       client.publish("stat/ledclock/temperature/symbol", "?", true);
       break;
   }
+#endif
 }
 
 void updateMqttTempCorrection() {
+#if (WIFIMODE == 1 || WIFIMODE == 2) && (MQTTMODE == 1)
   char outCorr[10];
   sprintf(outCorr, "%4.1f", temperatureCorrection);
   client.publish("stat/ledclock/temperature/correction", outCorr, true);
+#endif
 }
 
 void updateMqttTemperature() {
+#if (WIFIMODE == 1 || WIFIMODE == 2) && (MQTTMODE == 1)
   RtcTemperature temp = Rtc.GetTemperature();
   float ftemp = temp.AsFloatDegC();
   // float ctemp = ftemp + temperatureCorrection;      // Add correction after conversion??
@@ -1183,15 +1207,18 @@ void updateMqttTemperature() {
   char outTemp[10];
   sprintf(outTemp, "%4.1f", ctemp);
   client.publish("stat/ledclock/temperature", outTemp, true);
+#endif
 }
 
 void updateMqttScoreboardScores() {
+#if (WIFIMODE == 1 || WIFIMODE == 2) && (MQTTMODE == 1)
   char outLeft[5];
   char outRight[5];
   sprintf(outLeft, "%3u", scoreboardLeft);
   sprintf(outRight, "%3u", scoreboardRight);
   client.publish("stat/ledclock/scoreboard/scoreleft", outLeft, true);
   client.publish("stat/ledclock/scoreboard/scoreright", outRight, true);
+#endif
 }
 // **********************************
 void printDateTime(const RtcDateTime& dt)
